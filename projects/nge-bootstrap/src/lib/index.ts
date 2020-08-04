@@ -1,20 +1,20 @@
 import {NgModule} from '@angular/core';
-import {NgEbDropdownModule} from './dropdown/dropdown.module';
+import {NgeDropdownModule} from './dropdown/dropdown.module';
 
 export {
-  NgEbDropdown,
-  NgEbDropdownToggle,
-  NgEbDropdownItem,
-  NgEbDropdownMenu,
-  NgEbDropdownModule,
+  NgeDropdown,
+  NgeDropdownToggle,
+  NgeDropdownItem,
+  NgeDropdownMenu,
+  NgeDropdownModule,
 } from './dropdown/dropdown.module';
 
 
 
 const NGB_MODULES = [
-  NgEbDropdownModule
+  NgeDropdownModule
 ];
 
 @NgModule({imports: NGB_MODULES, exports: NGB_MODULES})
-export class NgEbModule {
+export class NgeModule {
 }

@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
-import { NgEbDropdownToggle, NgEbDropdownMenu, NgEbDropdown, NgEbDropdownItem } from './dropdown';
-export { NgEbDropdownToggle, NgEbDropdownMenu, NgEbDropdown, NgEbDropdownItem } from './dropdown';
+import { NgeDropdownToggle, NgeDropdownMenu, NgeDropdown, NgeDropdownItem } from './dropdown';
+export { NgeDropdownToggle, NgeDropdownMenu, NgeDropdown, NgeDropdownItem } from './dropdown';
 
 
 @NgModule({
   declarations: [
-    NgEbDropdownItem,
-    NgEbDropdownToggle,
-    NgEbDropdownMenu,
-    NgEbDropdown,
+    NgeDropdownItem,
+    NgeDropdownToggle,
+    NgeDropdownMenu,
+    NgeDropdown,
 
   ],
   exports: [
-    NgEbDropdownItem,
-    NgEbDropdownToggle,
-    NgEbDropdownMenu,
-    NgEbDropdown,
+    NgeDropdownItem,
+    NgeDropdownToggle,
+    NgeDropdownMenu,
+    NgeDropdown,
   ]
 })
-export class NgEbDropdownModule { }
+export class NgeDropdownModule { }

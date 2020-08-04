@@ -1,17 +1,19 @@
 // tslint:disable-next-line: max-line-length
-import { Directive, Input, ElementRef, ContentChildren, QueryList, ContentChild, AfterContentInit, OnDestroy, Renderer2, ChangeDetectorRef, Inject, forwardRef, EventEmitter, Output } from '@angular/core';
+import { Directive, Input, ElementRef, ContentChildren, 
+  QueryList, ContentChild, AfterContentInit, OnDestroy, 
+  Renderer2, ChangeDetectorRef, Inject, forwardRef, EventEmitter, Output } from '@angular/core';
 import { Subject, fromEvent } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Key } from '../common/key';
 
 
 // tslint:disable-next-line: directive-selector
-@Directive({ selector: '[ngEbDropdownItem]',
+@Directive({ selector: '[ngeDropdownItem]',
 // tslint:disable-next-line: no-host-metadata-property
 host: { class: 'dropdown-item',
  '[class.disabled]': 'disabled' } })
 // tslint:disable-next-line: directive-class-suffix
-export class NgEbDropdownItem {
+export class NgeDropdownItem {
 
   // tslint:disable-next-line: variable-name
   private _disabled = false;
@@ -29,7 +31,7 @@ export class NgEbDropdownItem {
 
 @Directive({
   // tslint:disable-next-line: directive-selector
-  selector: '[ngEbDropdownToggle]',
+  selector: '[ngeDropdownToggle]',
   // tslint:disable-next-line: no-host-metadata-property
   host: {
     class: 'dropdown-toggle',
@@ -48,9 +50,9 @@ export class NgEbDropdownItem {
 
 })
 // tslint:disable-next-line: directive-class-suffix
-export class NgEbDropdownToggle {
+export class NgeDropdownToggle {
   nativeElement: HTMLElement;
-  constructor(@Inject(forwardRef(() => NgEbDropdown)) public dropdown,
+  constructor(@Inject(forwardRef(() => NgeDropdown)) public dropdown,
               elementRef: ElementRef<HTMLElement>) {
     this.nativeElement = elementRef.nativeElement;
   }
@@ -58,12 +60,11 @@ export class NgEbDropdownToggle {
 
 @Directive({
   // tslint:disable-next-line: directive-selector
-  selector: '[ngEbDropdownMenu]',
+  selector: '[ngeDropdownMenu]',
   // tslint:disable-next-line: no-host-metadata-property
   host: {
     '[class.dropdown-menu]': 'true',
     '[class.show]': 'dropdown.isOpen()',
-    '[attr.x-placement]': 'placement',
     '(keydown.ArrowUp)': 'dropdown.onKeyDown($event)',
     '(keydown.ArrowDown)': 'dropdown.onKeyDown($event)',
     '(keydown.Escape)': 'dropdown.onKeyDown($event)',
@@ -76,25 +77,26 @@ export class NgEbDropdownToggle {
   }
 })
 // tslint:disable-next-line: directive-class-suffix
-export class NgEbDropdownMenu {
-  @ContentChildren(NgEbDropdownItem) menuItems: QueryList<NgEbDropdownItem>;
+export class NgeDropdownMenu {
+  @ContentChildren(NgeDropdownItem) menuItems: QueryList<NgeDropdownItem>;
   nativeElement: HTMLElement;
-  constructor(private cd: ChangeDetectorRef, @Inject(forwardRef(() => NgEbDropdown)) public dropdown) {
+  constructor(private cd: ChangeDetectorRef, @Inject(forwardRef(() => NgeDropdown)) public dropdown) {
   }
 
 }
 
 // tslint:disable-next-line: directive-selector
-@Directive({ selector: '[ngEbDropdown]', exportAs: 'ngEbDropdown' })
+@Directive({ selector: '[ngeDropdown]', exportAs: 'ngeDropdown' })
 // tslint:disable-next-line: directive-class-suffix
-export class NgEbDropdown implements AfterContentInit, OnDestroy {
+export class NgeDropdown implements AfterContentInit, OnDestroy {
   private close$ = new Subject();
   @Input() value: any;
+  @Input() name: string;
   @Output() valueChange: EventEmitter<any> = new EventEmitter<any>();
   // tslint:disable-next-line: variable-name
-  @ContentChild(NgEbDropdownMenu, { static: false }) private _menu: NgEbDropdownMenu;
+  @ContentChild(NgeDropdownMenu, { static: false }) private _menu: NgeDropdownMenu;
   // tslint:disable-next-line: variable-name
-  @ContentChild(NgEbDropdownToggle, { static: false }) private _toggle: NgEbDropdownToggle;
+  @ContentChild(NgeDropdownToggle, { static: false }) private _toggle: NgeDropdownToggle;
 
   /**
    * Defines whether or not the dropdown menu is opened initially.
@@ -103,6 +105,9 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
   // tslint:disable-next-line: no-input-rename
   @Input('open') bOpen = false;
   @Output() openChange = new EventEmitter<boolean>();
+  // tslint:disable-next-line: no-output-native
+  @Output() change = new EventEmitter<any>();
+  private hiddenField: HTMLInputElement;
   constructor(
     private elementRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef,
@@ -112,10 +117,15 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
   ngOnDestroy(): void {
   }
   ngAfterContentInit(): void {
+    this.hiddenField = document.createElement('input');
+    this.hiddenField.setAttribute('type', 'hidden');
+    if (this.name) {
+      this.hiddenField.setAttribute('name', this.name);
+    }
     this.cd.detectChanges();
   }
 
-  private getDropdownItems(): NgEbDropdownItem[] {
+  private getDropdownItems(): NgeDropdownItem[] {
       const menu = this._menu;
       if (menu == null) {
       return [];
@@ -130,7 +140,7 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
     if (!this.bOpen) {
       this.bOpen = true;
       this.openChange.emit(true);
-      let dropdownItem: NgEbDropdownItem | null = null;
+      let dropdownItem: NgeDropdownItem | null = null;
       const dropdownItems = this.getDropdownItems();
       dropdownItems.forEach((item, index) => {
         this.renderer.setAttribute(item.elementRef.nativeElement, 'tabindex', index + '');
@@ -156,7 +166,7 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
       }
       this.bOpen = false;
       if (selectedValue) {
-        this.valueChange.emit(selectedValue);
+        this.changeValue(selectedValue);
       }
       this.cd.detectChanges();
       this.close$.next();
@@ -169,14 +179,18 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
       this.open();
     }
   }
-
+  changeValue(value: any){
+    this.valueChange.emit(value);
+    this.hiddenField.value = value;
+    this.change.emit(value);
+  }
   onKeyDown(event: KeyboardEvent) {
     // tslint:disable-next-line:deprecation
     const key = event.which;
     const isEventFromToggle = this.isEventFromToggle(event);
     const dropdownItems = this.getDropdownItems();
     let position = -1;
-    let dropdownItem: NgEbDropdownItem | null = null;
+    let dropdownItem: NgeDropdownItem | null = null;
     if (dropdownItems.length) {
       dropdownItems.forEach((item, index) => {
         if (item.value === this.value) {
@@ -234,7 +248,7 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
             position = dropdownItems.length - 1;
             break;
         }
-        this.valueChange.emit(dropdownItems[position].value);
+        this.changeValue(dropdownItems[position].value);
         this.cd.detectChanges();
       }
       event.preventDefault();
@@ -255,7 +269,7 @@ export class NgEbDropdown implements AfterContentInit, OnDestroy {
             position = dropdownItems.length - 1;
             break;
         }
-        this.valueChange.emit(dropdownItems[position].value);
+        this.changeValue(dropdownItems[position].value);
         dropdownItems[position].elementRef.nativeElement.focus();
         this.cd.detectChanges();
       }
