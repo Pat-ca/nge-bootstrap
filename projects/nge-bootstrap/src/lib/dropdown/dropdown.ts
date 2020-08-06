@@ -241,7 +241,6 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
     // tslint:disable-next-line:deprecation
     const key = event.which;
     const isEventFromToggle = this.isEventFromToggle(event);
-    console.log(key);
     // closing on Enter / Space
     if (
       (key === Key.Space || key === Key.Enter || key === Key.Escape) &&
