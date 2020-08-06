@@ -1,0 +1,21 @@
+<div class="dropdown" ngeDropdown >
+  <button ngeDropdownToggle class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+  <span class="caret"></span></button>
+  <ul ngeDropdownMenu class="dropdown-menu">
+    <li ngeDropdownItem ><a  href="javasript:void(0)">HTML</a></li>
+    <li ngeDropdownItem ><a href="javasript:void(0)">CSS</a></li>
+    <li ngeDropdownItem ><a href="javasript:void(0)">JavaScript</a></li>
+  </ul>
+</div>
+<div class="dropdown" ngeDropdown [(value)]="selected" >
+  <button ngeDropdownToggle class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{selected}}
+  <span class="caret"></span></button>
+  <ul ngeDropdownMenu class="dropdown-menu">
+    <li ngeDropdownItem *ngFor="let o of options" [value]="o" ><a href="javasript:void(0)">{{o}}</a></li>
+  </ul>
+</div>
+<select >
+  <option  ><a href="javasript:void(0)">HTML</a></option>
+  <option  ><a href="javasript:void(0)">CSS</a></option>
+  <option  ><a href="javasript:void(0)">JavaScript</a></option>
+</select>
