@@ -23,6 +23,7 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 // tslint:disable-next-line: directive-selector
 @Directive({
+  // tslint:disable-next-line: directive-selector
   selector: '[ngeDropdownItem]',
   // tslint:disable-next-line: no-host-metadata-property
   host: { class: 'dropdown-item', '[class.disabled]': 'disabled' },
@@ -41,7 +42,7 @@ export class NgeDropdownItem {
     return this._disabled;
   }
 
-  constructor(public elementRef: ElementRef<HTMLElement>) {}
+  constructor(public elementRef: ElementRef<HTMLElement>) { }
 }
 
 @Directive({
@@ -106,7 +107,7 @@ export class NgeDropdownMenu implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     fromEvent<FocusEvent>(this.nativeElement, 'focusout')
-    .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe(({ relatedTarget }) => {
         if (!this.nativeElement.contains(relatedTarget as HTMLElement)) {
           this.dropdown.close();
@@ -129,10 +130,10 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
   @Output() valueChange: EventEmitter<any> = new EventEmitter<any>();
   // tslint:disable-next-line: variable-name
   @ContentChild(NgeDropdownMenu, { static: false })
-  private _menu: NgeDropdownMenu;
+  private dropdownMenu: NgeDropdownMenu;
   // tslint:disable-next-line: variable-name
   @ContentChild(NgeDropdownToggle, { static: false })
-  private _toggle: NgeDropdownToggle;
+  private toggleElement: NgeDropdownToggle;
 
   /**
    * Defines whether or not the dropdown menu is opened initially.
@@ -144,14 +145,14 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
   // tslint:disable-next-line: no-output-native
   @Output() change = new EventEmitter<any>();
   private hiddenField: HTMLInputElement;
-  private dropdownItems:  NgeDropdownItem[];
+  private dropdownItems: NgeDropdownItem[];
   private dropdownItem: NgeDropdownItem | null = null;
   private position = -1;
   constructor(
     private elementRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef,
     private renderer: Renderer2
-  ) {}
+  ) { }
   ngOnDestroy(): void {
     this.close$.next();
     this.close$.complete();
@@ -166,14 +167,14 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
   }
 
   private getDropdownItems(): NgeDropdownItem[] {
-    const menu = this._menu;
+    const menu = this.dropdownMenu;
     if (menu == null) {
       return [];
     }
     return menu.menuItems.filter((item) => !item.disabled);
   }
   private isEventFromToggle(event: KeyboardEvent) {
-    return this._toggle.nativeElement.contains(event.target as HTMLElement);
+    return this.toggleElement.nativeElement.contains(event.target as HTMLElement);
   }
   isOpen(): boolean {
     return this.bOpen;
@@ -185,7 +186,7 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
       this.bOpen = true;
       this.openChange.emit(true);
       this.dropdownItems = this.getDropdownItems();
-      if(this.dropdownItems){
+      if (this.dropdownItems) {
         this.dropdownItems.forEach((item, index) => {
           this.renderer.setAttribute(
             item.elementRef.nativeElement,
@@ -203,16 +204,16 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
             this.dropdownItem = item;
             this.position = index;
           }
-        });  
-      }
-      if (this.dropdownItem) {  
-        setTimeout(() => {
-          this.dropdownItem.elementRef.nativeElement.focus();          
         });
-      }else if(this.dropdownItems){
+      }
+      if (this.dropdownItem) {
+        setTimeout(() => {
+          this.dropdownItem.elementRef.nativeElement.focus();
+        });
+      } else if (this.dropdownItems) {
         this.position = 0;
         setTimeout(() => {
-          this.dropdownItems[0].elementRef.nativeElement.focus();          
+          this.dropdownItems[0].elementRef.nativeElement.focus();
         });
       }
       this.cd.detectChanges();
@@ -246,9 +247,9 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
       (key === Key.Space || key === Key.Enter || key === Key.Escape) &&
       this.isOpen()
     ) {
-      if (this._toggle){
+      if (this.toggleElement) {
         setTimeout(() => {
-          this._toggle.nativeElement.focus();
+          this.toggleElement.nativeElement.focus();
         });
       }
       this.close();
@@ -261,7 +262,7 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
 
     if (key === Key.Tab) {
       if (event.target && this.isOpen()) {
-        if (this._toggle.nativeElement === event.target) {
+        if (this.toggleElement.nativeElement === event.target) {
           if (event.shiftKey) {
             this.close();
           }
@@ -270,7 +271,7 @@ export class NgeDropdown implements AfterContentInit, OnDestroy {
           fromEvent<FocusEvent>(event.target as HTMLElement, 'focusout')
             .pipe(take(1))
             .subscribe(({ relatedTarget }) => {
-                this.close();
+              this.close();
             });
         }
       }

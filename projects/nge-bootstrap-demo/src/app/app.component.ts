@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'nge-demo';
   selected = 'CSS';
-  options = ['HTML','CSS', 'Javascript'];
+  options = ['HTML', 'CSS', 'Javascript'];
 }
