@@ -11,6 +11,7 @@ import {
     SimpleChanges,
     TemplateRef,
     ViewEncapsulation,
+    ChangeDetectorRef,
   } from '@angular/core';
   /**
    * This directive allows the usage of HTML markup or other directives
@@ -24,12 +25,6 @@ import {
   export class NgeToastHeader {
   }
 
-  /**
-   * Toasts provide feedback messages as notifications to the user.
-   * Goal is to mimic the push notifications available both on mobile and desktop operating systems.
-   *
-   * @since 5.0.0
-   */
 @Component({
     // tslint:disable-next-line: component-selector
     selector: 'nge-toast',
@@ -44,19 +39,16 @@ import {
       '[class.show]': 'true',
     },
     template: `
-      <ng-template #headerTpl>
-        <strong class="mr-auto">{{header}}</strong>
-      </ng-template>
-      <ng-template [ngIf]="contentHeaderTpl || header">
+      <div class="toast">
         <div class="toast-header">
-          <ng-template [ngTemplateOutlet]="contentHeaderTpl || headerTpl"></ng-template>
-          <button type="button" class="close" aria-label="Close" i18n-aria-label="@@nge.toast.close-aria" (click)="hide()">
+        <strong>{{header}}</strong>
+          <button type="button" aria-label="Close" i18n-aria-label="@@nge.toast.close-aria" (click)="hide()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-      </ng-template>
-      <div class="toast-body">
-        <ng-content></ng-content>
+        <div class="toast-body">
+          <ng-content></ng-content>
+        </div>
       </div>
     `,
     styleUrls: ['./toast.scss']
@@ -66,42 +58,14 @@ import {
       OnChanges {
     private _timeoutID: any;
 
-    /**
-     * Delay after which the toast will hide (ms).
-     * default: `500` (ms) (inherited from NgbToastConfig)
-     */
-    @Input() delay: number;
-
-    /**
-     * Auto hide the toast after a delay in ms.
-     * default: `true` (inherited from NgbToastConfig)
-     */
-    @Input() autohide: boolean;
-
-    /**
-     * Text to be used as toast's header.
-     * Ignored if a ContentChild template is specified at the same time.
-     */
+    @Input() delay = 500;
+    @Input() autoHide = true;
     @Input() header: string;
-    /**
-     * A template like `<ng-template ngbToastHeader></ng-template>` can be
-     * used in the projected content to allow markup usage.
-     */
     @ContentChild(NgeToastHeader, {read: TemplateRef, static: true}) contentHeaderTpl: TemplateRef<any>| null = null;
-
-    /**
-     * An event fired immediately when toast's `hide()` method has been called.
-     * It can only occur in 2 different scenarios:
-     * - `autohide` timeout fires
-     * - user clicks on a closing cross (&times)
-     *
-     * Additionally this output is purely informative. The toast won't disappear. It's up to the user to take care of
-     * that.
-     */
     // tslint:disable-next-line: no-output-rename
     @Output('hide') hideOutput = new EventEmitter<void>();
 
-    constructor(@Attribute('aria-live') public ariaLive: string) {
+    constructor(@Attribute('aria-live') public ariaLive: string, private cd: ChangeDetectorRef) {
     }
 
     ngAfterContentInit() { this._init(); }
@@ -119,7 +83,7 @@ import {
     }
 
     private _init() {
-      if (this.autohide && !this._timeoutID) {
+      if (this.autoHide && !this._timeoutID) {
         this._timeoutID = setTimeout(() => this.hide(), this.delay);
       }
     }
