@@ -64,7 +64,7 @@ import {
   // tslint:disable-next-line: component-class-suffix
   export class NgeToast implements AfterContentInit,
       OnChanges {
-    private _timeoutID: NodeJS.Timeout;
+    private _timeoutID: any;
 
     /**
      * Delay after which the toast will hide (ms).

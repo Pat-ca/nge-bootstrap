@@ -19,7 +19,6 @@ import {
 import { Subject, fromEvent } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Key } from '../common/key';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 // tslint:disable-next-line: directive-selector
 @Directive({

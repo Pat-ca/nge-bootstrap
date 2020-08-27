@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgeDropdownModule } from 'projects/nge-bootstrap/src/lib';
+import { NgeToastModule } from 'projects/nge-bootstrap/src/lib/toast/toast.module';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { NgeDropdownModule } from 'projects/nge-bootstrap/src/lib';
   imports: [
     BrowserModule,
     NgeDropdownModule,
+    NgeToastModule,
     AppRoutingModule
   ],
   providers: [],
