@@ -27,6 +27,6 @@
 <div>
 <div>Toast</div>
 <button (click)="showToast()" >Show Toast</button>
-<nge-toast *ngIf="toast" [delay]="5000" [autohide]="true" (hide)="hideToast()">Test</nge-toast>
+<nge-toast *ngIf="toast" [delay]="500" [header]="'test'" [autoHide]="true" (hide)="hideToast()">Test</nge-toast>
 
 </div>
