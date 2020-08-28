@@ -52,7 +52,7 @@ export interface ToastConfig {
     content = "";
     show = "";
     alertType = 'success';
-    private delay = 500;
+    private delay = 2000;
     private autoHide = true;
     @Input('toastConfig') 
     set toastConfig(config: ToastConfig) {
