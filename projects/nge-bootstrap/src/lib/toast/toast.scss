@@ -1,16 +1,39 @@
 
   nge-toast {
     .toast {
+      display: none;
       position: fixed;
       top: 0;
       right: 0;
+      padding: 0;
       margin: 0.5em;
       z-index: 1200;
-  
+      .bar {
+        display: flex;
+        min-width: 200px;
+        padding: 5px 5px;
+        justify-content: space-between;
+        align-items: baseline;
+        button {
+          border: none;
+          background-color: transparent;
+        }
+      }
     }
-    .toast-header .close {
-      margin-left: auto;
-      margin-bottom: 0.25rem;
+    .toast.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s;
+      animation: fadein 0.5s;
     }
+    @-webkit-keyframes fadein {
+      from { opacity: 0;}
+      to {opacity: 1;}
+    }
+    
+    @keyframes fadein {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }   
+
   }
   

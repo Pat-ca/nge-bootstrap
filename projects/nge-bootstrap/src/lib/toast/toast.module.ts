@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
-import {NgeToast, NgeToastHeader} from './toast';
-export {NgeToast, NgeToastHeader} from './toast';
+import {NgeToast} from './toast';
+export {NgeToast} from './toast';
 
 @NgModule(
     {
-        declarations: [NgeToast, NgeToastHeader],
-        exports: [NgeToast, NgeToastHeader]
+        declarations: [NgeToast],
+        exports: [NgeToast]
     })
 export class NgeToastModule {
 }

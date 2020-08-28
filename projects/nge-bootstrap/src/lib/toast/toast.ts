@@ -13,17 +13,6 @@ import {
     ViewEncapsulation,
     ChangeDetectorRef,
   } from '@angular/core';
-  /**
-   * This directive allows the usage of HTML markup or other directives
-   * inside of the toast's header.
-   *
-   * @since 5.0.0
-   */
-// tslint:disable-next-line: directive-selector
-@Directive({selector: '[ngeToastHeader]'})
-  // tslint:disable-next-line: directive-class-suffix
-  export class NgeToastHeader {
-  }
 
 @Component({
     // tslint:disable-next-line: component-selector
@@ -39,16 +28,13 @@ import {
       '[class.show]': 'true',
     },
     template: `
-      <div class="toast">
-        <div class="toast-header">
-        <strong>{{header}}</strong>
-          <button type="button" aria-label="Close" i18n-aria-label="@@nge.toast.close-aria" (click)="hide()">
+      <div class="toast show">
+          <div class="alert alert-{{option}} bar" role="alert">
+            <span>{{header}}</span>
+            <button type="button" aria-label="Close" (click)="hide()">
             <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          <ng-content></ng-content>
-        </div>
+            </button>
+          </div>
       </div>
     `,
     styleUrls: ['./toast.scss']
@@ -56,12 +42,12 @@ import {
   // tslint:disable-next-line: component-class-suffix
   export class NgeToast implements AfterContentInit,
       OnChanges {
-    private _timeoutID: any;
+    private timeoutID: any;
 
     @Input() delay = 500;
     @Input() autoHide = true;
     @Input() header: string;
-    @ContentChild(NgeToastHeader, {read: TemplateRef, static: true}) contentHeaderTpl: TemplateRef<any>| null = null;
+    @Input() option: string = 'success';
     // tslint:disable-next-line: no-output-rename
     @Output('hide') hideOutput = new EventEmitter<void>();
 
@@ -83,15 +69,15 @@ import {
     }
 
     private _init() {
-      if (this.autoHide && !this._timeoutID) {
-        this._timeoutID = setTimeout(() => this.hide(), this.delay);
+      if (this.autoHide && !this.timeoutID) {
+        this.timeoutID = setTimeout(() => this.hide(), this.delay);
       }
     }
 
     private _clearTimeout() {
-      if (this._timeoutID) {
-        clearTimeout(this._timeoutID);
-        this._timeoutID = null;
+      if (this.timeoutID) {
+        clearTimeout(this.timeoutID);
+        this.timeoutID = null;
       }
     }
   }
