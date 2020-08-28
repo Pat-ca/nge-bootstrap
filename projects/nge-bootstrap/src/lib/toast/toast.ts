@@ -14,6 +14,13 @@ import {
     ChangeDetectorRef,
   } from '@angular/core';
 
+export interface ToastConfig {
+  text: string;
+  delay: number;
+  alertType: string;
+  autoHide: boolean;
+}
+
 @Component({
     // tslint:disable-next-line: component-selector
     selector: 'nge-toast',
@@ -28,9 +35,9 @@ import {
       '[class.show]': 'true',
     },
     template: `
-      <div class="toast show">
-          <div class="alert alert-{{option}} bar" role="alert">
-            <span>{{header}}</span>
+      <div class="toast {{show}}" >
+          <div class="alert alert-{{alertType}} bar" role="alert">
+            <span>{{content}}</span>
             <button type="button" aria-label="Close" (click)="hide()">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -40,44 +47,55 @@ import {
     styleUrls: ['./toast.scss']
   })
   // tslint:disable-next-line: component-class-suffix
-  export class NgeToast implements AfterContentInit,
-      OnChanges {
+  export class NgeToast implements OnChanges {
     private timeoutID: any;
-
-    @Input() delay = 500;
-    @Input() autoHide = true;
-    @Input() header: string;
-    @Input() option: string = 'success';
-    // tslint:disable-next-line: no-output-rename
-    @Output('hide') hideOutput = new EventEmitter<void>();
-
+    content = "";
+    show = "";
+    alertType = 'success';
+    private delay = 500;
+    private autoHide = true;
+    @Input('toastConfig') 
+    set toastConfig(config: ToastConfig) {
+      if(config) {
+        this.content = config.text;
+        this.delay = config.delay || this.delay;        
+        this.autoHide = config.autoHide || this.autoHide;  
+        this.alertType = config.alertType || this.alertType;      
+        if(this.content) {
+          this.showToast();
+        }
+  
+      }
+    }
+  
     constructor(@Attribute('aria-live') public ariaLive: string, private cd: ChangeDetectorRef) {
     }
 
-    ngAfterContentInit() { this._init(); }
-
     ngOnChanges(changes: SimpleChanges) {
       if ('autohide' in changes) {
-        this._clearTimeout();
-        this._init();
+        this.clearToast();
+        this.showToast();
       }
     }
 
     hide() {
-      this._clearTimeout();
-      this.hideOutput.emit();
+      this.clearToast();
     }
 
-    private _init() {
+    private showToast() {
+      this.show = "show";
       if (this.autoHide && !this.timeoutID) {
         this.timeoutID = setTimeout(() => this.hide(), this.delay);
       }
     }
 
-    private _clearTimeout() {
+    private clearToast() {
+      this.show = "";
       if (this.timeoutID) {
         clearTimeout(this.timeoutID);
+        this.toastConfig = null;
         this.timeoutID = null;
       }
+      this.cd.detectChanges();
     }
   }

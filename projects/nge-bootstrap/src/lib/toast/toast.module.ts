@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
-import {NgeToast} from './toast';
-export {NgeToast} from './toast';
+import {NgeToast, ToastConfig} from './toast';
+export {NgeToast, ToastConfig} from './toast';
 
 @NgModule(
     {

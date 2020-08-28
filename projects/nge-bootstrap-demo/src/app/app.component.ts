@@ -1,4 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
+import { ToastConfig } from 'projects/nge-bootstrap/src/lib/toast/toast.module';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent {
   toast: any;
   constructor(private cd: ChangeDetectorRef){}
   showToast(){
-    this.toast = {'test': 1};
+    this.toast = {'text': 'This is Toast', delay: 6000} as ToastConfig;
     this.cd.detectChanges();
   }
   hideToast() {
