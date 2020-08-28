@@ -1,6 +1,6 @@
 {
   "name": "nge-bootstrap",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Patrick Li",
   "license": "MIT",
   "peerDependencies": {
