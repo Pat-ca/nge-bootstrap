@@ -9,7 +9,7 @@ Run `ng generate component component-name --project nge-bootstrap` to generate a
 
 ## Build
 
-Run `ng build nge-bootstrap` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build nge-bootstrap --prod` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Publishing
 
