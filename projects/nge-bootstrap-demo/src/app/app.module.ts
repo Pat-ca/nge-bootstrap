@@ -3,10 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgeDropdownModule } from 'projects/nge-bootstrap/src/lib';
-import { NgeToastModule } from 'projects/nge-bootstrap/src/lib/toast/toast.module';
+import { NgeDropdownModule, NgeDatePickerModule, NgeToastModule, NgeTabModule } from 'projects/nge-bootstrap/src/lib';
 import { NgeModule } from 'nge-bootstrap';
-import { NgeTabModule } from 'projects/nge-bootstrap/src/lib/tab/tab.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +15,7 @@ import { NgeTabModule } from 'projects/nge-bootstrap/src/lib/tab/tab.module';
     NgeDropdownModule,
     NgeToastModule,
     NgeTabModule,
+    NgeDatePickerModule,
     AppRoutingModule
   ],
   providers: [],
