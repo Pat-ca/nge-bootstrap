@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { NgeDropdownModule } from './dropdown/dropdown.module';
 import { NgeToastModule } from './toast/toast.module';
 import { NgeTabModule } from './tab/tab.module';
+import { NgeDatePickerModule } from './datepicker/date-picker.module';
 
 export {
   NgeDropdown,
@@ -21,11 +22,19 @@ export {
 } from './tab/tab.module';
 
 export {
+  NgeDatePicker,
+} from './datepicker/date-picker.module';
+
+
+export {
   NgeDropdownModule,
   NgeToastModule,
-  NgeTabModule
+  NgeTabModule,
+  NgeDatePickerModule
 }
-const NGB_MODULES = [NgeDropdownModule, NgeToastModule];
+
+
+const NGB_MODULES = [NgeDropdownModule, NgeToastModule, NgeTabModule, NgeDatePickerModule];
 
 @NgModule({ imports: NGB_MODULES, exports: NGB_MODULES })
 export class NgeModule {}

@@ -1,8 +1,8 @@
-// import { NgEbDropdown } from './dropdown';
+// import { NgeDropdown } from './dropdown';
 
-// describe('NgEbDropdown', () => {
+// describe('NgeDropdown', () => {
 //   it('should create an instance', () => {
-//     const directive = new NgEbDropdown();
+//     const directive = new NgeDropdown();
 //     expect(directive).toBeTruthy();
 //   });
 // });

@@ -32,8 +32,8 @@ export class NgeTabTitle {
     // tslint:disable-next-line: component-selector
     selector: 'nge-tab-content',
     // tslint:disable-next-line: no-host-metadata-property
-    host: { '[class.is-active]': 'active? true : false', class:'' },
-    template: `<ng-content></ng-content>`,
+    host: { '[class.active]': 'active? true : false', class: '' },
+    template: `<ng-content *ngIf="active" ></ng-content>`,
     styleUrls: ['./tab-content.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -69,7 +69,7 @@ export class NgeTabContent {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 // tslint:disable-next-line: component-class-suffix
-export class NgeTabs implements AfterContentInit, AfterContentChecked {
+export class NgeTabs implements AfterContentInit {
     @ContentChildren(NgeTabTitle) titles: QueryList<NgeTabTitle>;
     @ContentChildren(NgeTabContent) contents: QueryList<NgeTabContent>;
     activeTitle: NgeTabTitle = null;
@@ -79,10 +79,6 @@ export class NgeTabs implements AfterContentInit, AfterContentChecked {
             () => this.updateActiveTabByTitle(this.titles.first)
         );
     }
-    ngAfterContentChecked(): void {
-        this.cd.detectChanges();
-    }
- 
     updateActiveTabByTitle(activeTitle: NgeTabTitle) {
         this.updateActiveTab((titleArr) => titleArr.indexOf(activeTitle));
         this.cd.detectChanges();
