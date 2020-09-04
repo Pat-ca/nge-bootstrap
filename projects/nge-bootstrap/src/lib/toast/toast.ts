@@ -53,13 +53,15 @@ export interface ToastConfig {
     show = "";
     alertType = 'success';
     private delay = 2000;
-    private autoHide = true;
+    @Input() autoHide: boolean;
     @Input('toastConfig') 
     set toastConfig(config: ToastConfig) {
       if(config) {
+        console.log('config',config );
         this.content = config.text;
         this.delay = config.delay || this.delay;        
         this.autoHide = config.autoHide || this.autoHide;  
+        console.log('autoHide',this.autoHide );
         this.alertType = config.alertType || this.alertType;      
         if(this.content) {
           this.showToast();
@@ -84,6 +86,7 @@ export interface ToastConfig {
 
     private showToast() {
       this.show = "show";
+      console.log('autoHide show',this.autoHide );
       if (this.autoHide && !this.timeoutID) {
         this.timeoutID = setTimeout(() => this.hide(), this.delay);
       }

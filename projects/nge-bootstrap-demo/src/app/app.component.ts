@@ -14,7 +14,7 @@ export class AppComponent {
   toast: any;
   constructor(private cd: ChangeDetectorRef){}
   showToast(){
-    this.toast = {'text': 'This is Toast', delay: 6000} as ToastConfig;
+    this.toast = {text: 'This is Toast', delay: 1000, autoHide: false} as ToastConfig;
     this.cd.detectChanges();
   }
   hideToast() {
