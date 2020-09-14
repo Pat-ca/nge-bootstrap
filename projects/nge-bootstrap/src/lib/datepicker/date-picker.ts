@@ -4,7 +4,15 @@ import { NgeDate } from './ngeDate';
 
 @Component({
     selector: 'nge-datepicker',
-    template: `<div>
+    template: `<div class="date-picker">
+                    <div class="nav">
+                        <button><span class="chevron"></span></button>
+                        <nav></nav>
+                        <button><span class="chevron right"></span></button>
+                    </div>
+                    <div>
+                        <span *ngFor="let name of weekdayNames" >{{name}}</span>
+                    </div>
                     <div *ngFor="let week of viewData">
                         <button *ngFor="let d of week" >
                         {{d.day}}
@@ -18,6 +26,7 @@ import { NgeDate } from './ngeDate';
 export class NgeDatePicker implements OnInit {
     selectedDate: NgeDate;
     viewData = [] as any;
+    weekdayNames = [];
     constructor(private cd: ChangeDetectorRef, private app: ApplicationRef, private datePickerService: NgeDatePickerService) {
         this.selectedDate = {} as NgeDate;
     }
@@ -35,6 +44,7 @@ export class NgeDatePicker implements OnInit {
             }
             weekData.push(data[i]);
         }
+        this.weekdayNames = this.datePickerService.getWeekDayNames(2);
         this.cd.detectChanges();
     }
 }

@@ -50,5 +50,14 @@ export class NgeDatePickerService {
         }
         return list;
     }
+    getWeekDayNames(length){
+        if (length === 2) {
+            return ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+        }else if (length === 3) {
+            return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        }else {
+            return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        }
+    }
 
 }
