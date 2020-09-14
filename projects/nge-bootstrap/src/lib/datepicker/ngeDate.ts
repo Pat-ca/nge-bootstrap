@@ -3,3 +3,7 @@ export interface NgeDate {
     month: number;
     day: number;
 }
+export interface NgeYearMonth {
+    year: number;
+    month: number;
+}

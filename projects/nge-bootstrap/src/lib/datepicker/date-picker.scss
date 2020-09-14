@@ -9,6 +9,10 @@ $grid-length: 2.2em;
             nav {
                 flex: 1;
             }
+            button {
+                width: 100%;
+            }
+            text-align: center;
         }
         button {
             min-width: $grid-length;

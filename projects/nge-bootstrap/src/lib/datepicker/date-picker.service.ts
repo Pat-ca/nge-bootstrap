@@ -1,52 +1,50 @@
-import { NgeDate } from './ngeDate';
+import { NgeDate, NgeYearMonth } from './ngeDate';
 import { Injectable } from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class NgeDatePickerService {
-    getDayViewData(year, month): NgeDate[] {
-        const days = this.getDaysInMonth(year, month);
-        const firstDay = (new Date(year, month , 1)).getDay();
-        const prevMonthDays = this.getPreviousMonthDays(year, month).slice(-firstDay);
-        const currentMonthDays = this.getCurrentMonthDays(year, month);
-        const nextMonthDays = this.getNextMonthDays(year, month)
+    getDayViewData(yearMonth: NgeYearMonth): NgeDate[] {
+        //const days = this.getDaysInMonth(yearMonth);
+        const firstDay = (new Date(yearMonth.year, yearMonth.month , 1)).getDay();
+        let prevMonthDays = [];
+        if(firstDay > 0)
+        {
+            prevMonthDays = this.getPreviousMonthDays(yearMonth).slice(-firstDay);
+        }
+        const currentMonthDays = this.getCurrentMonthDays(yearMonth);
+        const nextMonthDays = this.getNextMonthDays(yearMonth)
         nextMonthDays.length = (35 - prevMonthDays.length - currentMonthDays.length);
         const viewData = prevMonthDays.concat(currentMonthDays).concat(nextMonthDays);
         return viewData;
 
     }
-    getDaysInMonth(year, month): number {
-        return new Date(year, month + 1, 0).getDate();
+    getDaysInMonth(yearMonth: NgeYearMonth): number {
+        return new Date(yearMonth.year, yearMonth.month + 1, 0).getDate();
     }
 
-    getYearMonth(date: Date): any {
-        return {
-            year: date.getFullYear(),
-            month: date.getMonth()
-        };
-    }
-    getPreviousMonthDays(year, month): NgeDate[] {
-        if (month === 0) {
-            year--;
-            month = 11;
+    getPreviousMonthDays(yearMonth: NgeYearMonth): NgeDate[] {
+        if (yearMonth.month === 0) {
+            yearMonth.year--;
+            yearMonth.month = 11;
         } else {
-            month--;
+            yearMonth.month--;
         }
-        return this.getCurrentMonthDays(year, month);
+        return this.getCurrentMonthDays(yearMonth);
     }
-    getNextMonthDays(year, month): NgeDate[] {
-        if (month === 11) {
-            year++;
-            month = 0;
+    getNextMonthDays(yearMonth: NgeYearMonth): NgeDate[] {
+        if (yearMonth.month === 11) {
+            yearMonth.year++;
+            yearMonth.month = 0;
         } else {
-            month++;
+            yearMonth.month++;
         }
-        return this.getCurrentMonthDays(year, month);
+        return this.getCurrentMonthDays(yearMonth);
     }
-    getCurrentMonthDays(year, month) {
-        const days = this.getDaysInMonth(year, month);
+    getCurrentMonthDays(yearMonth: NgeYearMonth) {
+        const days = this.getDaysInMonth(yearMonth);
         const list =  [] as  NgeDate[];
         for (let i = 1; i <= days; i++) {
-            list.push({year, month, day: i} as NgeDate);
+            list.push({year: yearMonth.year, month:yearMonth.month, day: i} as NgeDate);
         }
         return list;
     }
@@ -59,5 +57,21 @@ export class NgeDatePickerService {
             return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         }
     }
-
+    getMonthName(month){
+        console.log('month', month);
+        const months = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return months[month];
+    }
+    getNextYearMonth(yearMonth: NgeYearMonth): NgeYearMonth {
+        if(yearMonth.month === 11) {
+            return {year: ++yearMonth.year, month: 0} as NgeYearMonth;
+        }
+        return  {year: yearMonth.year, month: ++yearMonth.month} as NgeYearMonth;
+    }
+    getPreviousYearMonth(yearMonth: NgeYearMonth): NgeYearMonth {
+        if(yearMonth.month === 0) {
+            return {year: --yearMonth.year, month: 11} as NgeYearMonth;
+        }
+        return  {year: yearMonth.year, month: --yearMonth.month} as NgeYearMonth;
+    }
 }
