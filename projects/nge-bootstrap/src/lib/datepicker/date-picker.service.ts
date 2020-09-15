@@ -1,16 +1,18 @@
 import { NgeDate, NgeYearMonth } from './ngeDate';
 import { Injectable } from '@angular/core';
-import { NgeDayView } from './view';
+import { NgeDayView, NgeMonthView } from './view';
+import { NgeDatepickerI18n } from './datepicker-i18n';
 
 @Injectable({providedIn: 'root'})
 export class NgeDatePickerService {
+    constructor(private i18n: NgeDatepickerI18n){}
     getDayViewData(yearMonth: NgeYearMonth): NgeDayView {
         const dayView = {} as NgeDayView;
         const firstDay = (new Date(yearMonth.year, yearMonth.month , 1)).getDay();
         const currentMonthDays = this.getCurrentMonthDays(yearMonth);
         const prevMonthDays = this.getPreviousMonthDays(yearMonth);
         const nextMonthDays = this.getNextMonthDays(yearMonth);
-        dayView.weekDayNames = this.getWeekDayNames(2);
+        dayView.weekDayNames = this.i18n.getWeekdayShortNames();
         dayView.month = yearMonth;
         dayView.days = [] as any;
         let fromPreviousMonth = [];
@@ -32,6 +34,22 @@ export class NgeDatePickerService {
             weekData.push(days[i]);
         }
         return dayView;
+
+    }
+    getMonthViewData(year: number): NgeMonthView {
+        const monthView = {} as NgeMonthView;
+        monthView.year = year;
+        monthView.monthNames = this.i18n.getMonthShortNames();
+        monthView.months = [];
+        let monthData = [] as NgeYearMonth[];
+        for(let i=0; i<12;i++){
+            if(i % 4 === 0) {
+                monthData = [] as NgeYearMonth[];
+                monthView.months.push(monthData);
+            }
+            monthData.push({year, month: i});
+        }
+        return monthView;
 
     }
     getDaysInMonth(yearMonth: NgeYearMonth): number {
@@ -66,18 +84,9 @@ export class NgeDatePickerService {
         }
         return list;
     }
-    getWeekDayNames(length){
-        if (length === 2) {
-            return ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-        }else if (length === 3) {
-            return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        }else {
-            return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        }
-    }
-    getMonthName(month){
-        const months = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        return months[month];
+
+    getMonthName(month): string {
+        return this.i18n.getMonthFullName(month);
     }
     getNextYearMonth(yearMonth: NgeYearMonth): NgeYearMonth {
         if(yearMonth.month === 11) {

@@ -6,3 +6,8 @@ export interface NgeDayView {
     month: NgeYearMonth;
     weekDayNames: string[];
 }
+export interface NgeMonthView {
+    months: Array<NgeYearMonth[]>;
+    year: number;
+    monthNames: string[];
+}
