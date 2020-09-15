@@ -17,7 +17,11 @@ export class NgeDatePickerService {
         if (firstDay > 0) {
             fromPreviousMonth = prevMonthDays.slice(-firstDay);
         }
-        nextMonthDays.length = (35 - fromPreviousMonth.length - currentMonthDays.length);
+        let nextLength = 35 - fromPreviousMonth.length - currentMonthDays.length;
+        if(nextLength < 0) {
+            nextLength = nextLength + 7;
+        }
+        nextMonthDays.length = nextLength;
         const days = fromPreviousMonth.concat(currentMonthDays).concat(nextMonthDays);
         let weekData = [] as NgeDate[];
         for (let i = 0; i < days.length; i ++) {
@@ -34,21 +38,23 @@ export class NgeDatePickerService {
         return new Date(yearMonth.year, yearMonth.month + 1, 0).getDate();
     }
 
-    getPreviousMonthDays(yearMonth: NgeYearMonth): NgeDate[] {
+    getPreviousMonthDays(ym: NgeYearMonth): NgeDate[] {
+        const yearMonth = {year:ym.year, month: ym.month} as NgeYearMonth;
         if (yearMonth.month === 0) {
-            yearMonth.year--;
+            yearMonth.year = yearMonth.year-1;
             yearMonth.month = 11;
         } else {
-            yearMonth.month--;
+            yearMonth.month = yearMonth.month - 1;
         }
         return this.getCurrentMonthDays(yearMonth);
     }
-    getNextMonthDays(yearMonth: NgeYearMonth): NgeDate[] {
+    getNextMonthDays(ym: NgeYearMonth): NgeDate[] {
+        const yearMonth = {year:ym.year, month: ym.month} as NgeYearMonth;
         if (yearMonth.month === 11) {
-            yearMonth.year++;
+            yearMonth.year = yearMonth.year + 1;
             yearMonth.month = 0;
         } else {
-            yearMonth.month++;
+            yearMonth.month = yearMonth.month + 1;
         }
         return this.getCurrentMonthDays(yearMonth);
     }
@@ -70,7 +76,6 @@ export class NgeDatePickerService {
         }
     }
     getMonthName(month){
-        console.log('month', month);
         const months = ["January","February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         return months[month];
     }

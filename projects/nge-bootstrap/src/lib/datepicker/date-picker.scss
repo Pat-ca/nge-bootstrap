@@ -1,52 +1,87 @@
 $grid-length: 2.2em;
+$datepicer-background-color: #ffffff;
+$bold-color: lighten(#000000, 50%);
 :host {
-    .date-picker {
-        box-sizing: border-box;
-        width: $grid-length * 7;
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            nav {
-                flex: 1;
-            }
-            button {
-                width: 100%;
-            }
-            text-align: center;
-        }
-        button {
-            min-width: $grid-length;
-            min-height: $grid-length;
-            border: 0px solid #FFFFFF;
-        }
-        span {
-            display: inline-block;
-            min-width: $grid-length;
-            min-height: $grid-length;
-            border: 0px solid #FFFFFF;
-            font-weight: bold;
-   
-        }
-        .chevron {
-            border-style: solid;
-            border-width: .2em .2em 0 0;
-            border-color: #000000;
-            display: inline-block;
-            width: .75em;
-            height: .75em;
-            min-width: auto;
-            min-height: auto;
-            margin-left: .25em;
-            margin-right: .15em;
-            -webkit-transform: rotate(-135deg);
-            transform: rotate(-135deg);
-            &.right {
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-                margin-left: .15em;
-                margin-right: .25em;
-            }
-        } 
-        
+  .date-picker {
+    background-color: $datepicer-background-color;
+    border: $bold-color solid 1px;
+    border-radius: 2px;
+    box-sizing: content-box;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.35);
+    width: $grid-length * 7;
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      nav {
+        flex: 1;
+      }
+      button {
+        background-color: transparent;
+      }
+      text-align: center;
     }
+    .week-name {
+      color: $bold-color;
+      font-weight: bold;
+    }
+    button,
+    a {
+      display: inline-block;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      line-height: $grid-length;
+      min-width: $grid-length;
+      min-height: $grid-length;
+      border: 0px solid #ffffff;
+      border-radius: 3px;
+      background-color: transparent;
+      &:hover {
+        background-color: darken($datepicer-background-color, 10%);
+      }
+      position: relative;
+      &.today {
+          &:before {
+            content: "";
+            display: inline-block;
+            border: solid transparent;
+            border-width: 0 0 0.3em 0.3em;
+            border-bottom-color: #337ab7;
+            border-top-color: rgba(0, 0, 0, 0.2);
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+          }
+        }
+  }
+    span {
+      background-color: transparent;
+      display: inline-block;
+      min-width: $grid-length;
+      min-height: $grid-length;
+      border: 0px solid #000000;
+      line-height: $grid-length;
+      text-align: center;
+    }
+    .chevron {
+      border-style: solid;
+      border-width: 0.2em 0.2em 0 0;
+      border-color: $bold-color;
+      display: inline-block;
+      width: 0.75em;
+      height: 0.75em;
+      min-width: auto;
+      min-height: auto;
+      margin-left: 0.25em;
+      margin-right: 0.15em;
+      -webkit-transform: rotate(-135deg);
+      transform: rotate(-135deg);
+      &.right {
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        margin-left: 0.15em;
+        margin-right: 0.25em;
+      }
+    }
+  }
 }

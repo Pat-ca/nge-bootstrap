@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, ApplicationRef } from "@angular/core";
 import { NgeDatePickerService } from './date-picker.service';
+import { NgeDatepickerI18n } from './datepicker-i18n';
 import { NgeDate, NgeYearMonth } from './ngeDate';
 import { NgeDayView } from './view';
 
@@ -13,13 +14,13 @@ import { NgeDayView } from './view';
                         </nav>
                         <button (click)="moveNextMonth()" ><span class="chevron right"></span></button>
                     </div>
-                    <div>
+                    <div class="week-name">
                         <span *ngFor="let name of dayView.weekDayNames" >{{name}}</span>
                     </div>
                     <div *ngFor="let week of dayView.days">
-                        <button *ngFor="let d of week" >
+                        <a [ngClass]="{'today' : isToday(d)}" tabindex="0" *ngFor="let d of week" >
                         {{d.day}}
-                        </button>
+                        </a>
                     </div>
                 </div>`,
     styleUrls: ['./date-picker.scss'],
@@ -30,11 +31,13 @@ export class NgeDatePicker implements OnInit {
     selectedDate: NgeDate;
     dayView = {} as NgeDayView;
     currentYearMonth = {} as NgeYearMonth;
-    constructor(private cd: ChangeDetectorRef, private app: ApplicationRef, private datePickerService: NgeDatePickerService) {
+    constructor(private cd: ChangeDetectorRef, private app: ApplicationRef, private datePickerService: NgeDatePickerService, private test: NgeDatepickerI18n) {
         this.selectedDate = {} as NgeDate;
     }
     ngOnInit(): void {
         this.initializeDatePicker();
+        const test = this.test.getMonthFullName(1);
+        console.log('test', test);
     }
     initializeDatePicker() {
         const today = new Date();
@@ -57,7 +60,11 @@ export class NgeDatePicker implements OnInit {
     }
     getDayView(yearMonth){
         this.dayView = this.datePickerService.getDayViewData(yearMonth);
-        console.log(this.dayView);
         this.cd.detectChanges();
     }
+    isToday(date: NgeDate) {
+        const today = new Date();
+        return date.year === today.getFullYear() && date.month === today.getMonth() && date.day === today.getDate();
+    }
+    
 }

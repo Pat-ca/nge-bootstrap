@@ -1,5 +1,5 @@
-import { NgeDate } from 'dist/nge-bootstrap/lib/datepicker/ngeDate';
-import { NgeYearMonth } from './ngeDate';
+
+import { NgeDate, NgeYearMonth } from './ngeDate';
 
 export interface NgeDayView {
     days: Array<NgeDate[]>;
