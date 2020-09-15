@@ -1,21 +1,33 @@
 import { NgeDate, NgeYearMonth } from './ngeDate';
 import { Injectable } from '@angular/core';
+import { NgeDayView } from './view';
 
 @Injectable({providedIn: 'root'})
 export class NgeDatePickerService {
-    getDayViewData(yearMonth: NgeYearMonth): NgeDate[] {
-        //const days = this.getDaysInMonth(yearMonth);
+    getDayViewData(yearMonth: NgeYearMonth): NgeDayView {
+        const dayView = {} as NgeDayView;
         const firstDay = (new Date(yearMonth.year, yearMonth.month , 1)).getDay();
-        let prevMonthDays = [];
-        if(firstDay > 0)
-        {
-            prevMonthDays = this.getPreviousMonthDays(yearMonth).slice(-firstDay);
-        }
         const currentMonthDays = this.getCurrentMonthDays(yearMonth);
-        const nextMonthDays = this.getNextMonthDays(yearMonth)
-        nextMonthDays.length = (35 - prevMonthDays.length - currentMonthDays.length);
-        const viewData = prevMonthDays.concat(currentMonthDays).concat(nextMonthDays);
-        return viewData;
+        const prevMonthDays = this.getPreviousMonthDays(yearMonth);
+        const nextMonthDays = this.getNextMonthDays(yearMonth);
+        dayView.weekDayNames = this.getWeekDayNames(2);
+        dayView.month = yearMonth;
+        dayView.days = [] as any;
+        let fromPreviousMonth = [];
+        if (firstDay > 0) {
+            fromPreviousMonth = prevMonthDays.slice(-firstDay);
+        }
+        nextMonthDays.length = (35 - fromPreviousMonth.length - currentMonthDays.length);
+        const days = fromPreviousMonth.concat(currentMonthDays).concat(nextMonthDays);
+        let weekData = [] as NgeDate[];
+        for (let i = 0; i < days.length; i ++) {
+            if (i % 7 === 0) {
+                weekData = [] as NgeDate[];
+                dayView.days.push(weekData);
+            }
+            weekData.push(days[i]);
+        }
+        return dayView;
 
     }
     getDaysInMonth(yearMonth: NgeYearMonth): number {
@@ -44,7 +56,7 @@ export class NgeDatePickerService {
         const days = this.getDaysInMonth(yearMonth);
         const list =  [] as  NgeDate[];
         for (let i = 1; i <= days; i++) {
-            list.push({year: yearMonth.year, month:yearMonth.month, day: i} as NgeDate);
+            list.push({year: yearMonth.year, month: yearMonth.month, day: i} as NgeDate);
         }
         return list;
     }
