@@ -31,8 +31,6 @@ export interface ToastConfig {
       'role': 'alert',
       '[attr.aria-live]': 'ariaLive',
       'aria-atomic': 'true',
-      '[class.toast]': 'true',
-      '[class.show]': 'true',
     },
     template: `
       <div class="toast {{show}}" >
@@ -57,11 +55,9 @@ export interface ToastConfig {
     @Input('toastConfig') 
     set toastConfig(config: ToastConfig) {
       if(config) {
-        console.log('config',config );
         this.content = config.text;
         this.delay = config.delay || this.delay;        
         this.autoHide = config.autoHide || this.autoHide;  
-        console.log('autoHide',this.autoHide );
         this.alertType = config.alertType || this.alertType;      
         if(this.content) {
           this.showToast();
@@ -86,7 +82,6 @@ export interface ToastConfig {
 
     private showToast() {
       this.show = "show";
-      console.log('autoHide show',this.autoHide );
       if (this.autoHide && !this.timeoutID) {
         this.timeoutID = setTimeout(() => this.hide(), this.delay);
       }
